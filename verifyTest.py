@@ -18,14 +18,16 @@ def reNoise(im):
     #去噪点
     #value判断周围的几点是不是和这个点一样，如果这个点和周围8个点都不一样，反转
     pix = im.load()
-    for i in range(2,im.size[0]-1):
-        for y in range(2,im.size[1]-1):
-            warp_list = [pix[i-1,y],pix[i-1,y-1],pix[i,y-1],pix[i+1,y+1],pix[i,y+1],pix[i+1,y],pix[i+1,y-1],pix[i-1,y+1],pix[i,y]]
-            if  warp_list.count(pix[i,y])<3:
-                if pix[i,y] == 255:
-                    pix[i,y] = 0
-                else:
-                    pix[i,y] = 255
+    for c in range(6):
+        for i in range(5,im.size[0]-5):
+            for y in range(5,im.size[1]-5):
+                warp_list = [pix[a,b] for a in range(i-c,i+c) for b in range(y-c,y+c)]
+                #print(len(warp_list),warp_list)
+                if  warp_list.count(pix[i,y])<2*c-1:
+                    if pix[i,y] == 255:
+                        pix[i,y] = 0
+                    else:
+                        pix[i,y] = 255
     return im
 
 if __name__  == '__main__':
